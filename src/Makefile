@@ -30,9 +30,11 @@ CXXFLAGS = $(CFLAGS)
 
 SRCS = \
     tpl-base.h \
+    tpl-interp.h interp.c \
     tpl-filter.h filter.c filter-vect.cpp
 
 OBJS = \
+    interp.o \
     filter.o filter-vect.o
 
 default: all
@@ -55,6 +57,10 @@ clean:
 	$(CXX) $(CXXFLAGS) -c "$<" -o "$@"
 %.o: $(srcdir)/%.c
 	$(CC) $(CFLAGS) -c "$<" -o "$@"
+
+interp.e: tpl-base.h tpl-interp.h
+interp.S: tpl-base.h tpl-interp.h
+interp.o: tpl-base.h tpl-interp.h
 
 filter.e: tpl-base.h tpl-filter.h
 filter.S: tpl-base.h tpl-filter.h
