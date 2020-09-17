@@ -29,13 +29,21 @@ CXX = gcc -std=c++17
 CXXFLAGS = $(CFLAGS)
 
 SRCS = \
+    filter-2d.c \
+    filter-vect.cpp \
+    filter.c \
+    interp.c \
     tpl-base.h \
-    tpl-interp.h interp.c \
-    tpl-filter.h filter.c filter-vect.cpp
+    tpl-filter.h \
+    tpl-image.h \
+    tpl-inline.h \
+    tpl-interp.h
 
 OBJS = \
-    interp.o \
-    filter.o filter-vect.o
+    filter-2d.o \
+    filter-vect.o \
+    filter.o \
+    interp.o
 
 default: all
 all: $(OBJS)
@@ -69,3 +77,7 @@ filter.o: tpl-base.h tpl-filter.h
 filter-vect.e: tpl-base.h tpl-filter.h
 filter-vect.S: tpl-base.h tpl-filter.h
 filter-vect.o: tpl-base.h tpl-filter.h
+
+filter-2d.e: tpl-base.h tpl-image.h tpl-inline.h
+filter-2d.S: tpl-base.h tpl-image.h tpl-inline.h
+filter-2d.o: tpl-base.h tpl-image.h tpl-inline.h
