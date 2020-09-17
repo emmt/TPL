@@ -15,20 +15,7 @@
 #ifndef _TPL_FILTER_H
 #define _TPL_FILTER_H 1
 
-#ifdef __cplusplus
-#  define _TPL_EXTERN_C_BEGIN extern "C" {
-#  define _TPL_EXTERN_C_END   }
-#  if defined(__GNUC__) || defined(__clang__)
-#    define restrict __restrict__
-#  elif defined(_MSC_VER)
-#    define restrict __restrict
-#  else
-#    define restrict
-#  endif
-#else
-#  define _TPL_EXTERN_C_BEGIN
-#  define _TPL_EXTERN_C_END
-#endif
+#include <tpl-base.h>
 
 _TPL_EXTERN_C_BEGIN
 

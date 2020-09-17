@@ -28,7 +28,12 @@ CFLAGS = -Wall -I$(srcdir) $(VCL_DEFS) $(PVC_DEFS) $(VECTORIZE)
 CXX = gcc -std=c++17
 CXXFLAGS = $(CFLAGS)
 
-OBJS = filter.o filter-vect.o
+SRCS = \
+    tpl-base.h \
+    tpl-filter.h filter.c filter-vect.cpp
+
+OBJS = \
+    filter.o filter-vect.o
 
 default: all
 all: $(OBJS)
@@ -51,10 +56,10 @@ clean:
 %.o: $(srcdir)/%.c
 	$(CC) $(CFLAGS) -c "$<" -o "$@"
 
-filter.e: tpl-filter.h
-filter.S: tpl-filter.h
-filter.o: tpl-filter.h
+filter.e: tpl-base.h tpl-filter.h
+filter.S: tpl-base.h tpl-filter.h
+filter.o: tpl-base.h tpl-filter.h
 
-filter-vect.e: tpl-filter.h
-filter-vect.S: tpl-filter.h
-filter-vect.o: tpl-filter.h
+filter-vect.e: tpl-base.h tpl-filter.h
+filter-vect.S: tpl-base.h tpl-filter.h
+filter-vect.o: tpl-base.h tpl-filter.h
