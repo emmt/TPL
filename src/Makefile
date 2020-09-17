@@ -1,3 +1,4 @@
+# Where are the sources?
 srcdir = .
 
 # The PVC Library.
@@ -23,10 +24,13 @@ VCL_SRC = $(srcdir)/../../vectorclasslibrary/version2
 VECTORIZE = -O3 -march=native -ffast-math -funroll-loops
 
 CC = gcc
-CFLAGS = -Wall -I$(srcdir) $(VCL_DEFS) $(PVC_DEFS) $(VECTORIZE)
+CFLAGS = -Wall  $(VECTORIZE)
+CPPFLAGS = -I$(srcdir) $(VCL_DEFS) $(PVC_DEFS)
 
 CXX = gcc -std=c++17
 CXXFLAGS = $(CFLAGS)
+
+LIBS = -L. -ltpl -lm
 
 SRCS = \
     filter-2d.c \
@@ -46,38 +50,48 @@ OBJS = \
     interp.o
 
 default: all
-all: $(OBJS)
+all: libtpl.a interp-tests
 
 clean:
 	rm -f *.o *~
 
+libtpl.a: $(OBJS)
+	$(AR) $(ARFLAGS) $@ $(OBJS)
+
 %.e: $(srcdir)/%.cpp
-	$(CXX) $(CXXFLAGS) -E "$<" -o "$@"
+	$(CXX) $(CXXFLAGS) $(CPPFLAGS) -E "$<" -o $@
+
 %.e: $(srcdir)/%.c
-	$(CC) $(CFLAGS) -E "$<" -o "$@"
+	$(CC) $(CFLAGS) $(CPPFLAGS) -E "$<" -o $@
 
 %.S: $(srcdir)/%.cpp
-	$(CXX) $(CXXFLAGS) -S "$<" -o "$@"
+	$(CXX) $(CXXFLAGS) $(CPPFLAGS) -S "$<" -o $@
+
 %.S: $(srcdir)/%.c
-	$(CC) $(CFLAGS) -S "$<" -o "$@"
+	$(CC) $(CFLAGS) $(CPPFLAGS) -S "$<" -o $@
 
 %.o: $(srcdir)/%.cpp
-	$(CXX) $(CXXFLAGS) -c "$<" -o "$@"
+	$(CXX) $(CXXFLAGS) $(CPPFLAGS) -c "$<" -o $@
+
 %.o: $(srcdir)/%.c
-	$(CC) $(CFLAGS) -c "$<" -o "$@"
+	$(CC) $(CFLAGS) $(CPPFLAGS) -c "$<" -o $@
 
-interp.e: tpl-base.h tpl-interp.h
-interp.S: tpl-base.h tpl-interp.h
-interp.o: tpl-base.h tpl-interp.h
+interp.e: $(srcdir)/tpl-base.h $(srcdir)/tpl-interp.h
+interp.S: $(srcdir)/tpl-base.h $(srcdir)/tpl-interp.h
+interp.o: $(srcdir)/tpl-base.h $(srcdir)/tpl-interp.h
 
-filter.e: tpl-base.h tpl-filter.h
-filter.S: tpl-base.h tpl-filter.h
-filter.o: tpl-base.h tpl-filter.h
+filter.e: $(srcdir)/tpl-base.h $(srcdir)/tpl-filter.h
+filter.S: $(srcdir)/tpl-base.h $(srcdir)/tpl-filter.h
+filter.o: $(srcdir)/tpl-base.h $(srcdir)/tpl-filter.h
 
-filter-vect.e: tpl-base.h tpl-filter.h
-filter-vect.S: tpl-base.h tpl-filter.h
-filter-vect.o: tpl-base.h tpl-filter.h
+filter-vect.e: $(srcdir)/tpl-base.h $(srcdir)/tpl-filter.h
+filter-vect.S: $(srcdir)/tpl-base.h $(srcdir)/tpl-filter.h
+filter-vect.o: $(srcdir)/tpl-base.h $(srcdir)/tpl-filter.h
 
-filter-2d.e: tpl-base.h tpl-image.h tpl-inline.h
-filter-2d.S: tpl-base.h tpl-image.h tpl-inline.h
-filter-2d.o: tpl-base.h tpl-image.h tpl-inline.h
+filter-2d.e: $(srcdir)/tpl-base.h $(srcdir)/tpl-image.h $(srcdir)/tpl-inline.h
+filter-2d.S: $(srcdir)/tpl-base.h $(srcdir)/tpl-image.h $(srcdir)/tpl-inline.h
+filter-2d.o: $(srcdir)/tpl-base.h $(srcdir)/tpl-image.h $(srcdir)/tpl-inline.h
+
+interp-tests: $(srcdir)/interp-tests.c $(srcdir)/tpl-base.h $(srcdir)/tpl-interp.h
+%: $(srcdir)/%.c
+	$(CC) $(CFLAGS) $(CPPFLAGS) $^ -o $@ $(LIBS)
