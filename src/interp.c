@@ -132,7 +132,7 @@ cardinal_cubic_spline_deriv_weights(TPL_InterpolationFunction const* ptr,
 }
 
 void
-tpl_init_cardinal_cubic_spline(TPL_CardinalCubicSpline* obj, double c)
+tpl_initialize_cardinal_cubic_spline(TPL_CardinalCubicSpline* obj, double c)
 {
     double q = (c + 1.0)/2.0;
     double t = 3*c + 9;
