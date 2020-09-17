@@ -54,10 +54,11 @@ typedef struct TPL_InterpolationFunction TPL_InterpolationFunction;
  *
  * This macro stores in `w` the interpolation weights for the interpolation
  * function pointed by `ptr` at offset `t`.  Argument `ptr` is evaluated more
- * than once.
+ * than once.  Argument `w` must have at least `ptr->size` elements.
  */
 #define TPL_INTERP_FUNC_WGTS(ptr, t, w) \
     ((ptr)->func_wgts((TPL_InterpolationFunction const*)ptr, t, w))
+
 /**
  * @def TPL_INTERP_DERIV_WGTS(ptr, t, w)
  *
@@ -66,7 +67,8 @@ typedef struct TPL_InterpolationFunction TPL_InterpolationFunction;
  *
  * This macro stores in `w` the interpolation weights for the derivative of the
  * interpolation function pointed by `ptr` at offset `t`.  Argument `ptr` is
- * evaluated more than once.
+ * evaluated more than once.  Argument `w` must have at least `ptr->size`
+ * elements.
  */
 #define TPL_INTERP_DERIV_WGTS(ptr, x) \
     ((ptr)->deriv_wgts((TPL_InterpolationFunction const*)ptr, t, w))
